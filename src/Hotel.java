@@ -2,6 +2,7 @@ import java.util.*;
 
 public class Hotel {
     private List<Zimmer> zimmerListe;
+    private List<Bewertung> bewertungen = new ArrayList<>();
 
     public Hotel() {
         zimmerListe = new ArrayList<>();   //Generiert automatisch 12 Zimmer, 5 EZ, 5 DZ, 2 Suiten
@@ -101,5 +102,57 @@ public class Hotel {
         }
         System.out.println("Zimmer " + zimmernummer + " existiert nicht.");
         return false;
+    }
+
+    public void addBewertung(int sterne, String kommentar) {
+        bewertungen.add(new Bewertung(sterne, kommentar));
+    }
+
+    public void zeigeBewertungenStatistik() {
+        if (bewertungen.isEmpty()) {
+            System.out.println("Noch keine Bewertungen vorhanden.");
+            return;
+        }
+        double avg = bewertungen.stream().mapToInt(Bewertung::getSterne).average().orElse(0);
+        System.out.printf("Durchschnittliche Bewertung: %.2f/5\n", avg);
+        System.out.println("Alle Kommentare:");
+        for (Bewertung b : bewertungen) {
+            System.out.println(b);
+        }
+    }
+
+    public double berechneEinnahmen() {
+        double summe = 0;
+        for (Zimmer z : zimmerListe) {
+            if (z.isBelegt()) {
+                summe += z.getPreisProNacht();
+            }
+        }
+        return summe;
+    }
+
+    public void zeigeAuslastungProKategorie() {
+        int ezGesamt = 0, ezBelegt = 0;
+        int dzGesamt = 0, dzBelegt = 0;
+        int suiteGesamt = 0, suiteBelegt = 0;
+        for (Zimmer z : zimmerListe) {
+            switch (z.getTyp()) {
+                case EINZELZIMMER:
+                    ezGesamt++;
+                    if (z.isBelegt()) ezBelegt++;
+                    break;
+                case DOPPELZIMMER:
+                    dzGesamt++;
+                    if (z.isBelegt()) dzBelegt++;
+                    break;
+                case SUITE:
+                    suiteGesamt++;
+                    if (z.isBelegt()) suiteBelegt++;
+                    break;
+            }
+        }
+        System.out.printf("Einzelzimmer: %d/%d belegt (%.2f%%)\n", ezBelegt, ezGesamt, ezGesamt == 0 ? 0 : (ezBelegt * 100.0 / ezGesamt));
+        System.out.printf("Doppelzimmer: %d/%d belegt (%.2f%%)\n", dzBelegt, dzGesamt, dzGesamt == 0 ? 0 : (dzBelegt * 100.0 / dzGesamt));
+        System.out.printf("Suiten: %d/%d belegt (%.2f%%)\n", suiteBelegt, suiteGesamt, suiteGesamt == 0 ? 0 : (suiteBelegt * 100.0 / suiteGesamt));
     }
 }

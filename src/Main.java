@@ -10,6 +10,7 @@ public class Main {
             System.out.println("\n--- Hauptmenü ---");
             System.out.println("1. Gästeverwaltung");
             System.out.println("2. Mitarbeiterverwaltung");
+            System.out.println("3. Statistik");
             System.out.println("0. Beenden");
             System.out.print("Bitte wählen: ");
             int hauptwahl = scanner.nextInt();
@@ -24,6 +25,7 @@ public class Main {
                         System.out.println("3. Gast auschecken");
                         System.out.println("4. Zimmer reservieren");
                         System.out.println("5. Verpflegung buchen");
+                        System.out.println("6. Bewertungen/Statistik anzeigen");
                         System.out.println("0. Zurück zum Hauptmenü");
                         System.out.print("Bitte wählen: ");
                         int gastwahl = scanner.nextInt();
@@ -42,7 +44,33 @@ public class Main {
                                 System.out.print("Zimmernummer für Check-out: ");
                                 int checkOutNr = scanner.nextInt();
                                 scanner.nextLine();
-                                hotel.checkOut(checkOutNr);
+                                boolean checkoutErfolg = hotel.checkOut(checkOutNr);
+                                if (checkoutErfolg) {
+                                    // Bewertung abfragen
+                                    int sterne = -1;
+                                    while (sterne < 1 || sterne > 5) {
+                                        System.out.print("Bitte geben Sie eine Bewertung von 1 bis 5 Sternen ab: ");
+                                        String sterneInput = scanner.nextLine();
+                                        try {
+                                            sterne = Integer.parseInt(sterneInput);
+                                            if (sterne < 1 || sterne > 5) {
+                                                System.out.println("Nur Werte von 1 bis 5 erlaubt!");
+                                            }
+                                        } catch (NumberFormatException e) {
+                                            System.out.println("Ungültige Eingabe! Bitte nur Zahlen eingeben.");
+                                        }
+                                    }
+                                    String kommentar = "";
+                                    while (kommentar.trim().isEmpty()) {
+                                        System.out.print("Kommentar zur Bewertung: ");
+                                        kommentar = scanner.nextLine();
+                                        if (kommentar.trim().isEmpty()) {
+                                            System.out.println("Kommentar darf nicht leer sein!");
+                                        }
+                                    }
+                                    hotel.addBewertung(sterne, kommentar);
+                                    System.out.println("Vielen Dank für Ihre Bewertung!");
+                                }
                                 break;
                             case 4:
                                 System.out.print("Zimmernummer für Reservierung: ");
@@ -63,12 +91,18 @@ public class Main {
                                 Verpflegung[] verpflegungen = new Verpflegung[teile.length];
                                 for (int i = 0; i < teile.length; i++) {
                                     switch (teile[i].trim()) {
-                                        case "1": verpflegungen[i] = Verpflegung.FRUEHSTUECK; break;
-                                        case "2": verpflegungen[i] = Verpflegung.MITTAGESSEN; break;
-                                        case "3": verpflegungen[i] = Verpflegung.ABENDESSEN; break;
+                                        case "1": verpflegungen[i] = Verpflegung.FRUEHSTUECK;
+                                        break;
+                                        case "2": verpflegungen[i] = Verpflegung.MITTAGESSEN;
+                                        break;
+                                        case "3": verpflegungen[i] = Verpflegung.ABENDESSEN;
+                                        break;
                                     }
                                 }
                                 hotel.bucheVerpflegung(verpfNr, verpflegungen);
+                                break;
+                            case 6:
+                                hotel.zeigeBewertungenStatistik();
                                 break;
                             case 0:
                                 gastMenue = false;
@@ -126,6 +160,36 @@ public class Main {
                                 break;
                             case 0:
                                 mitarbeiterMenue = false;
+                                break;
+                            default:
+                                System.out.println("Ungültige Auswahl!");
+                        }
+                    }
+                    break;
+                case 3:
+                    boolean statistikMenue = true;
+                    while (statistikMenue) {
+                        System.out.println("\n--- Statistik ---");
+                        System.out.println("1. Einnahmen anzeigen");
+                        System.out.println("2. Auslastung pro Kategorie anzeigen");
+                        System.out.println("3. Bewertungsdurchschnitt und Kommentare anzeigen");
+                        System.out.println("0. Zurück zum Hauptmenü");
+                        System.out.print("Bitte wählen: ");
+                        int statistikwahl = scanner.nextInt();
+                        scanner.nextLine();
+                        switch (statistikwahl) {
+                            case 1:
+                                double einnahmen = hotel.berechneEinnahmen();
+                                System.out.printf("Aktuelle Einnahmen (nur belegte Zimmer): %.2f Euro\n", einnahmen);
+                                break;
+                            case 2:
+                                hotel.zeigeAuslastungProKategorie();
+                                break;
+                            case 3:
+                                hotel.zeigeBewertungenStatistik();
+                                break;
+                            case 0:
+                                statistikMenue = false;
                                 break;
                             default:
                                 System.out.println("Ungültige Auswahl!");
