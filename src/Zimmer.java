@@ -7,6 +7,7 @@ public class Zimmer {
     private boolean reserviert;
     private String reservierterGast;
     private List<String> ausstattung;
+    private Set<Verpflegung> verpflegung;
 
     public Zimmer(int zimmernummer, zimmerTyp typ, List<String> ausstattung) {
         this.zimmernummer = zimmernummer;
@@ -15,6 +16,7 @@ public class Zimmer {
         this.belegt = false;
         this.reserviert = false;
         this.reservierterGast = null;
+        this.verpflegung = new HashSet<>();
     }
 
     public int getZimmernummer() { return zimmernummer; }
@@ -32,6 +34,15 @@ public class Zimmer {
         this.reservierterGast = null;
     }
     public List<String> getAusstattung() { return ausstattung; }
+    public Set<Verpflegung> getVerpflegung() { return verpflegung; }
+
+    public void bucheVerpflegung(Verpflegung... verpflegungen) {
+        verpflegung.addAll(Arrays.asList(verpflegungen));
+    }
+
+    public void storniereVerpflegung(Verpflegung... verpflegungen) {
+        verpflegung.removeAll(Arrays.asList(verpflegungen));
+    }
 
     public int getMaxPersonen() { return typ.getMaxPersonen(); }
     public double getPreisProNacht() { return typ.getPreisProNacht(); }
@@ -39,7 +50,8 @@ public class Zimmer {
     @Override
     public String toString() {
         String status = belegt ? "belegt" : (reserviert ? "reserviert für " + reservierterGast : "frei");
+        String verpflegungStr = verpflegung.isEmpty() ? "keine Verpflegung gebucht" : "Verpflegung: " + verpflegung;
         return "Zimmer " + zimmernummer + " (" + typ + ") - max. Personen: " + getMaxPersonen() +
-                ", Preis/Nacht: " + getPreisProNacht() + "€, Status: " + status;
+                ", Preis/Nacht: " + getPreisProNacht() + "€, Status: " + status + ", " + verpflegungStr;
     }
 }

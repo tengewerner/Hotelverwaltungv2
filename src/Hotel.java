@@ -20,7 +20,7 @@ public class Hotel {
     public boolean reserveZimmer(int zimmernummer, String gastName) {
         for (Zimmer z : zimmerListe) {
             if (z.getZimmernummer() == zimmernummer) {
-                if (!z.isBelegt() && !z.isReserviert()) {
+                if (!z.isBelegt() && !z.isReserviert()) {  //Falls Zimmer !NICHT! belegt und !NICHT! reserviert
                     z.reservieren(gastName);
                     System.out.println("Zimmer " + zimmernummer + " wurde für " + gastName + " reserviert.");
                     return true;
@@ -71,12 +71,32 @@ public class Hotel {
                 if (z.isBelegt()) {
                     z.setBelegt(false);
                     z.stornieren();
-                    System.out.println("Check-out erfolgreich für Zimmer " + zimmernummer + ". Reservierung wurde entfernt.");
+                    if (!z.getVerpflegung().isEmpty()) {
+                        Verpflegung[] alleVerpflegung = z.getVerpflegung().toArray(new Verpflegung[0]);
+                        z.storniereVerpflegung(alleVerpflegung);
+                    }
+                    System.out.println("Check-out erfolgreich für Zimmer " + zimmernummer + ". Reservierung und Verpflegung wurden entfernt.");
                     return true;
                 } else {
                     System.out.println("Zimmer " + zimmernummer + " ist bereits frei.");
                     return false;
                 }
+            }
+        }
+        System.out.println("Zimmer " + zimmernummer + " existiert nicht.");
+        return false;
+    }
+
+    public boolean bucheVerpflegung(int zimmernummer, Verpflegung... verpflegungen) {
+        for (Zimmer z : zimmerListe) {
+            if (z.getZimmernummer() == zimmernummer) {
+                if (!z.isBelegt()) {
+                    System.out.println("Verpflegung kann nur gebucht werden, wenn das Zimmer belegt ist.");
+                    return false;
+                }
+                z.bucheVerpflegung(verpflegungen);
+                System.out.println("Verpflegung " + Arrays.toString(verpflegungen) + " für Zimmer " + zimmernummer + " gebucht.");
+                return true;
             }
         }
         System.out.println("Zimmer " + zimmernummer + " existiert nicht.");

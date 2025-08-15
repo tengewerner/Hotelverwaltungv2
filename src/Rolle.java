@@ -1,0 +1,6 @@
+public enum Rolle {
+    REZEPTIONIST,
+    KUECHENPERSONAL,
+    REINIGUNGSPERSONAL
+}
+
