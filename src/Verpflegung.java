@@ -1,6 +1,4 @@
 public enum Verpflegung {
-    FRUEHSTUECK,
-    MITTAGESSEN,
-    ABENDESSEN
+    VOLLPENSION,
+    HALBPENSION
 }
-

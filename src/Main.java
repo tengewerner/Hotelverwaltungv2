@@ -84,22 +84,28 @@ public class Main {
                                 System.out.print("Zimmernummer für Verpflegung: ");
                                 int verpfNr = scanner.nextInt();
                                 scanner.nextLine();
-                                System.out.println("Verfügbare Verpflegung: 1. Frühstück 2. Mittagessen 3. Abendessen");
-                                System.out.print("Bitte Nummer(n) mit Komma getrennt eingeben (z.B. 1,3): ");
-                                String eingabe = scanner.nextLine();
-                                String[] teile = eingabe.split(",");
-                                Verpflegung[] verpflegungen = new Verpflegung[teile.length];
-                                for (int i = 0; i < teile.length; i++) {
-                                    switch (teile[i].trim()) {
-                                        case "1": verpflegungen[i] = Verpflegung.FRUEHSTUECK;
-                                        break;
-                                        case "2": verpflegungen[i] = Verpflegung.MITTAGESSEN;
-                                        break;
-                                        case "3": verpflegungen[i] = Verpflegung.ABENDESSEN;
-                                        break;
+                                System.out.println("Verpflegungsoptionen: 1. Vollpension 2. Halbpension");
+                                int auswahl = -1;
+                                while (auswahl != 1 && auswahl != 2) {
+                                    System.out.print("Bitte wählen Sie eine Option (1 oder 2): ");
+                                    if (scanner.hasNextInt()) {
+                                        auswahl = scanner.nextInt();
+                                        scanner.nextLine();
+                                        if (auswahl != 1 && auswahl != 2) {
+                                            System.out.println("Nur 1 oder 2 erlaubt!");
+                                        }
+                                    } else {
+                                        System.out.println("Ungültige Eingabe! Bitte nur Zahlen eingeben.");
+                                        scanner.nextLine();
                                     }
                                 }
-                                hotel.bucheVerpflegung(verpfNr, verpflegungen);
+                                Verpflegung verpflegung;
+                                if (auswahl == 1) {
+                                    verpflegung = Verpflegung.VOLLPENSION;
+                                } else {
+                                    verpflegung = Verpflegung.HALBPENSION;
+                                }
+                                hotel.bucheVerpflegung(verpfNr, verpflegung);
                                 break;
                             case 6:
                                 hotel.zeigeBewertungenStatistik();
@@ -180,7 +186,7 @@ public class Main {
                         switch (statistikwahl) {
                             case 1:
                                 double einnahmen = hotel.berechneEinnahmen();
-                                System.out.printf("Aktuelle Einnahmen (nur belegte Zimmer): %.2f Euro\n", einnahmen);
+                                System.out.println("Aktuelle Einnahmen (nur belegte Zimmer): " + einnahmen);
                                 break;
                             case 2:
                                 hotel.zeigeAuslastungProKategorie();
