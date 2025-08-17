@@ -88,7 +88,7 @@ public class Hotel {
         return false;
     }
 
-    public boolean bucheVerpflegung(int zimmernummer, Verpflegung... verpflegungen) {
+    public boolean bucheVerpflegung(int zimmernummer, Verpflegung... verpflegungen) {  // Verpflegung... ist ein varargs (array), der beliebig viele Verpflegungsarten aufnehmen kann
         for (Zimmer z : zimmerListe) {
             if (z.getZimmernummer() == zimmernummer) {
                 if (!z.isBelegt()) {
@@ -113,8 +113,12 @@ public class Hotel {
             System.out.println("Noch keine Bewertungen vorhanden.");
             return;
         }
-        double avg = bewertungen.stream().mapToInt(Bewertung::getSterne).average().orElse(0);
-        System.out.printf("Durchschnittliche Bewertung: %.2f/5\n", avg);
+    int summe = 0;
+    for (Bewertung b : bewertungen) {
+       summe += b.getSterne();
+    }
+        double avg = (double) summe / bewertungen.size();
+        System.out.println("Durchschnittliche Bewertung: " + avg + "/5");
         System.out.println("Alle Kommentare:");
         for (Bewertung b : bewertungen) {
             System.out.println(b);
@@ -151,8 +155,11 @@ public class Hotel {
                     break;
             }
         }
-        System.out.printf("Einzelzimmer: %d/%d belegt (%.2f%%)\n", ezBelegt, ezGesamt, ezGesamt == 0 ? 0 : (ezBelegt * 100.0 / ezGesamt));
-        System.out.printf("Doppelzimmer: %d/%d belegt (%.2f%%)\n", dzBelegt, dzGesamt, dzGesamt == 0 ? 0 : (dzBelegt * 100.0 / dzGesamt));
-        System.out.printf("Suiten: %d/%d belegt (%.2f%%)\n", suiteBelegt, suiteGesamt, suiteGesamt == 0 ? 0 : (suiteBelegt * 100.0 / suiteGesamt));
+        int ezProzent = ezBelegt * 100 / ezGesamt;
+        int dzProzent = dzBelegt * 100 / dzGesamt;
+        int suiteProzent = suiteBelegt * 100 / suiteGesamt;
+        System.out.println("Einzelzimmer: " + ezBelegt + "/" + ezGesamt + " belegt. " + "Auslastung: " + ezProzent + "%");
+        System.out.println("Doppelzimmer: " + dzBelegt + "/" + dzGesamt + " belegt. " + "Auslastung: " + dzProzent + "%");
+        System.out.println("Suiten: " + suiteBelegt + "/" + suiteGesamt + " belegt. " + "Auslastung: " + suiteProzent + "%");
     }
 }
