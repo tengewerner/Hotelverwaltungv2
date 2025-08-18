@@ -176,7 +176,7 @@ public class Main {
                     boolean statistikMenue = true;
                     while (statistikMenue) {
                         System.out.println("\n--- Statistik ---");
-                        System.out.println("1. Einnahmen anzeigen");
+                        System.out.println("1. Gesamteinnahmen (inkl. ausgecheckte Gäste) anzeigen");
                         System.out.println("2. Auslastung pro Kategorie anzeigen");
                         System.out.println("3. Bewertungsdurchschnitt und Kommentare anzeigen");
                         System.out.println("0. Zurück zum Hauptmenü");
@@ -185,8 +185,8 @@ public class Main {
                         scanner.nextLine();
                         switch (statistikwahl) {
                             case 1:
-                                double einnahmen = hotel.berechneEinnahmen();
-                                System.out.println("Aktuelle Einnahmen (nur belegte Zimmer): " + einnahmen);
+                                double gesamt = hotel.berechneEinnahmenGesamt();
+                                System.out.println("Gesamteinnahmen (inkl. ausgecheckte Gäste): " + gesamt);
                                 break;
                             case 2:
                                 hotel.zeigeAuslastungProKategorie();

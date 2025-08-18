@@ -8,6 +8,7 @@ public class Zimmer {
     private String reservierterGast;
     private List<String> ausstattung;
     private Set<Verpflegung> verpflegung;
+    private boolean ausgecheckt = false;
 
     public Zimmer(int zimmernummer, zimmerTyp typ, List<String> ausstattung) {
         this.zimmernummer = zimmernummer;
@@ -30,6 +31,9 @@ public class Zimmer {
     }
     public void setBelegt(boolean belegt) {
         this.belegt = belegt;
+        if (belegt) {
+            this.ausgecheckt = false;
+        }
     }
     public boolean isReserviert() {
         return reserviert;
@@ -44,6 +48,7 @@ public class Zimmer {
     public void stornieren() {
         this.reserviert = false;
         this.reservierterGast = null;
+        this.ausgecheckt = true;
     }
     public List<String> getAusstattung() {
         return ausstattung;
@@ -67,6 +72,15 @@ public class Zimmer {
     }
     public double getPreisProNacht() {
         return typ.getPreisProNacht();
+    }
+    public boolean isAusgecheckt() {
+        return ausgecheckt;
+    }
+    public void setAusgecheckt(boolean ausgecheckt) {
+        this.ausgecheckt = ausgecheckt;
+    }
+    public double getPreis() {
+        return getPreisProNacht();
     }
 
     @Override

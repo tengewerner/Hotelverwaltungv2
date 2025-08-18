@@ -122,11 +122,11 @@ public class Hotel {
         }
     }
 
-    public double berechneEinnahmen() {
+    public double berechneEinnahmenGesamt() {
         double summe = 0;
         for (Zimmer z : zimmerListe) {
-            if (z.isBelegt()) {
-                summe += z.getPreisProNacht();
+            if (z.isBelegt() || z.isAusgecheckt()) {
+                summe += z.getPreis();
             }
         }
         return summe;
