@@ -3,6 +3,8 @@ import java.util.*;
 public class Hotel {
     private List<Zimmer> zimmerListe;
     private List<Bewertung> bewertungen = new ArrayList<>();
+    private List<String> reinigungsplan = new ArrayList<>();
+    private int zimmerserviceEssenGesamt = 0;
 
     public Hotel() {
         zimmerListe = new ArrayList<>();   //Generiert automatisch 12 Zimmer, 5 EZ, 5 DZ, 2 Suiten
@@ -36,6 +38,51 @@ public class Hotel {
         }
         System.out.println("Zimmer " + zimmernummer + " existiert nicht.");
         return false;
+    }
+    public void bestelleZimmerservice(int zimmernummer, int personen) {
+        Zimmer zimmer = null;
+        for (Zimmer z : zimmerListe) {
+            if (z.getZimmernummer() == zimmernummer) {
+                zimmer = z;
+                break;
+            }
+        }
+        if (zimmer == null) {
+            System.out.println("Zimmer existiert nicht.");
+            return;
+        }
+        if (!zimmer.isBelegt()) {
+            System.out.println("Zimmer ist nicht belegt.");
+            return;
+        }
+        int maxPersonen = zimmer.getMaxPersonen();
+        if (personen < 1 || personen > maxPersonen) {
+            System.out.println("Ungültige Personenanzahl. Maximal erlaubt: " + maxPersonen);
+            return;
+        }
+        zimmerserviceEssenGesamt += personen;
+        System.out.println("Zimmerservice für " + personen + " Person(en) auf Zimmer " + zimmernummer + " bestellt.");
+    }
+
+    public int getZimmerserviceEssenGesamt() {
+        return zimmerserviceEssenGesamt;
+    }
+
+    public int berechneEssenVerbrauchGesamt() {
+        int gesamt = 0;
+        for (Zimmer zimmer : zimmerListe) {
+            int personen = zimmer.getMaxPersonen();
+            Verpflegung v = zimmer.getVerpflegung();
+            if (v == Verpflegung.VOLLPENSION) {
+                gesamt += personen * 3;
+            } else if (v == Verpflegung.HALBPENSION) {
+                gesamt += personen * 2;
+            } else if (v == Verpflegung.FRUEHSTUECK) {
+                gesamt += personen * 1;
+            }
+        }
+        gesamt += zimmerserviceEssenGesamt;
+        return gesamt;
     }
 
     public void zeigeAlleZimmer() {
@@ -73,7 +120,10 @@ public class Hotel {
                     z.setBelegt(false);
                     z.stornieren();
                     z.storniereVerpflegung();
-                    System.out.println("Check-out erfolgreich für Zimmer " + zimmernummer + ". Reservierung und Verpflegung wurden entfernt.");
+                    String zeitpunkt = java.time.LocalDateTime.now().toString();
+                    String eintrag = "Zimmer " + zimmernummer + " gereinigt am " + zeitpunkt;
+                    reinigungsplan.add(eintrag);
+                    System.out.println("Check-out erfolgreich für Zimmer " + zimmernummer + ". Reservierung und Verpflegung wurden entfernt. \nReinigung des Zimmers wird veranlasst und ist in kürze beendet.\n");
                     return true;
                 } else {
                     System.out.println("Zimmer " + zimmernummer + " ist bereits frei.");
@@ -158,5 +208,16 @@ public class Hotel {
         System.out.println("Einzelzimmer: " + ezBelegt + "/" + ezGesamt + " belegt. " + "Auslastung: " + ezProzent + "%");
         System.out.println("Doppelzimmer: " + dzBelegt + "/" + dzGesamt + " belegt. " + "Auslastung: " + dzProzent + "%");
         System.out.println("Suiten: " + suiteBelegt + "/" + suiteGesamt + " belegt. " + "Auslastung: " + suiteProzent + "%");
+    }
+
+    public void zeigeReinigungsplan() {
+        if (reinigungsplan.isEmpty()) {
+            System.out.println("Noch keine Zimmer gereinigt.");
+        } else {
+            System.out.println("--- Reinigungsplan ---");
+            for (String eintrag : reinigungsplan) {
+                System.out.println(eintrag);
+            }
+        }
     }
 }

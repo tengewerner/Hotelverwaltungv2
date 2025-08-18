@@ -1,4 +1,5 @@
 public enum Verpflegung {
     VOLLPENSION,
-    HALBPENSION
+    HALBPENSION,
+    FRUEHSTUECK
 }

@@ -25,7 +25,8 @@ public class Main {
                         System.out.println("3. Gast auschecken");
                         System.out.println("4. Zimmer reservieren");
                         System.out.println("5. Verpflegung buchen");
-                        System.out.println("6. Bewertungen/Statistik anzeigen");
+                        System.out.println("7. Reinigungsplan anzeigen");
+                        System.out.println("8. Zimmerservice bestellen");
                         System.out.println("0. Zurück zum Hauptmenü");
                         System.out.print("Bitte wählen: ");
                         int gastwahl = scanner.nextInt();
@@ -84,15 +85,15 @@ public class Main {
                                 System.out.print("Zimmernummer für Verpflegung: ");
                                 int verpfNr = scanner.nextInt();
                                 scanner.nextLine();
-                                System.out.println("Verpflegungsoptionen: 1. Vollpension 2. Halbpension");
+                                System.out.println("Verpflegungsoptionen: 1. Vollpension 2. Halbpension 3. Frühstück");
                                 int auswahl = -1;
-                                while (auswahl != 1 && auswahl != 2) {
-                                    System.out.print("Bitte wählen Sie eine Option (1 oder 2): ");
+                                while (auswahl < 1 || auswahl > 3) {
+                                    System.out.print("Bitte wählen Sie eine Option (1, 2 oder 3): ");
                                     if (scanner.hasNextInt()) {
                                         auswahl = scanner.nextInt();
                                         scanner.nextLine();
-                                        if (auswahl != 1 && auswahl != 2) {
-                                            System.out.println("Nur 1 oder 2 erlaubt!");
+                                        if (auswahl < 1 || auswahl > 3) {
+                                            System.out.println("Nur 1, 2 oder 3 erlaubt!");
                                         }
                                     } else {
                                         System.out.println("Ungültige Eingabe! Bitte nur Zahlen eingeben.");
@@ -102,13 +103,24 @@ public class Main {
                                 Verpflegung verpflegung;
                                 if (auswahl == 1) {
                                     verpflegung = Verpflegung.VOLLPENSION;
-                                } else {
+                                } else if (auswahl == 2) {
                                     verpflegung = Verpflegung.HALBPENSION;
+                                } else {
+                                    verpflegung = Verpflegung.FRUEHSTUECK;
                                 }
                                 hotel.bucheVerpflegung(verpfNr, verpflegung);
                                 break;
-                            case 6:
-                                hotel.zeigeBewertungenStatistik();
+                            case 7:
+                                hotel.zeigeReinigungsplan();
+                                break;
+                            case 8:
+                                System.out.print("Zimmernummer für Zimmerservice: ");
+                                int zsNr = scanner.nextInt();
+                                scanner.nextLine();
+                                System.out.print("Für wie viele Personen soll Essen bestellt werden? ");
+                                int pers = scanner.nextInt();
+                                scanner.nextLine();
+                                hotel.bestelleZimmerservice(zsNr, pers);
                                 break;
                             case 0:
                                 gastMenue = false;
@@ -179,6 +191,7 @@ public class Main {
                         System.out.println("1. Gesamteinnahmen (inkl. ausgecheckte Gäste) anzeigen");
                         System.out.println("2. Auslastung pro Kategorie anzeigen");
                         System.out.println("3. Bewertungsdurchschnitt und Kommentare anzeigen");
+                        System.out.println("4. Essensverbrauch insgesamt anzeigen");
                         System.out.println("0. Zurück zum Hauptmenü");
                         System.out.print("Bitte wählen: ");
                         int statistikwahl = scanner.nextInt();
@@ -194,6 +207,10 @@ public class Main {
                             case 3:
                                 hotel.zeigeBewertungenStatistik();
                                 break;
+                                case 4:
+                                    int essenGesamt = hotel.berechneEssenVerbrauchGesamt();
+                                    System.out.println("Insgesamt verbrauchtes Essen: " + essenGesamt + " Portionen");
+                                    break;
                             case 0:
                                 statistikMenue = false;
                                 break;
