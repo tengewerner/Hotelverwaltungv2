@@ -27,24 +27,18 @@ public class MitarbeiterVerwaltung {
             System.out.println("Keine Mitarbeiter vorhanden.");
             return;
         }
-        Map<Schicht, List<Mitarbeiter>> plan = new HashMap<>();
-        for (Schicht s : Schicht.values()) {
-            plan.put(s, new ArrayList<>());
-        }
-        for (Mitarbeiter m : mitarbeiterListe) {
-            plan.get(m.getSchicht()).add(m);
-        }
         for (Schicht s : Schicht.values()) {
             System.out.println("Schicht: " + s);
-            List<Mitarbeiter> ms = plan.get(s);
-            if (ms.isEmpty()) {
-                System.out.println("  Keine Mitarbeiter");
-            } else {
-                for (Mitarbeiter m : ms) {
+            boolean found = false;
+            for (Mitarbeiter m : mitarbeiterListe) {
+                if (m.getSchicht() == s) {
                     System.out.println("  " + m.getName() + " (" + m.getRolle() + ")");
+                    found = true;
                 }
+            }
+            if (!found) {
+                System.out.println("  Keine Mitarbeiter");
             }
         }
     }
 }
-
