@@ -1,27 +1,35 @@
 import java.util.Scanner;
 
-public class Main {     // Hauptklasse für die Hotelverwaltung
+public class Main {
+    // Hilfsmethode für Menü-Auswahl mit Bereichsprüfung
+    public static int liesMenueAuswahl(Scanner scanner, String prompt, int min, int max) {
+        while (true) {
+            System.out.print(prompt);
+            try {
+                int eingabe = Integer.parseInt(scanner.nextLine());
+                if (eingabe >= min && eingabe <= max) {
+                    return eingabe;
+                } else {
+                    System.out.println("Ungültige Auswahl! Bitte nur " + min + " bis " + max + " eingeben.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Ungültige Eingabe! Bitte nur Zahlen eingeben.");
+            }
+        }
+    }
+
     public static void main(String[] args) {
         Hotel hotel = new Hotel();
         MitarbeiterVerwaltung mitarbeiterVerwaltung = null;
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
-        while (running) {                               // Hauptmenü
+        while (running) {
             System.out.println("\n--- Hauptmenü ---");
             System.out.println("1. Gästeverwaltung");
             System.out.println("2. Mitarbeiterverwaltung");
             System.out.println("3. Statistik");
             System.out.println("0. Beenden");
-            System.out.print("Bitte wählen: ");
-            int hauptwahl = -1;
-            while (hauptwahl == -1) {
-                try {
-                    hauptwahl = Integer.parseInt(scanner.nextLine());
-                } catch (NumberFormatException e) {
-                    System.out.println("Ungültige Eingabe! Bitte nur Zahlen eingeben.");
-                    System.out.print("Bitte wählen: ");
-                }
-            }
+            int hauptwahl = liesMenueAuswahl(scanner, "Bitte wählen: ", 0, 3);
             switch (hauptwahl) {            // Auswahl nach Menüpunkt
                 case 1:
                     boolean gastMenue = true;
@@ -35,16 +43,7 @@ public class Main {     // Hauptklasse für die Hotelverwaltung
                         System.out.println("6. Reinigungsplan anzeigen");
                         System.out.println("7. Zimmerservice bestellen");
                         System.out.println("0. Zurück zum Hauptmenü");
-                        System.out.print("Bitte wählen: ");
-                        int gastwahl = -1;
-                        while (gastwahl == -1) {
-                            try {
-                                gastwahl = Integer.parseInt(scanner.nextLine());
-                            } catch (NumberFormatException e) {
-                                System.out.println("Ungültige Eingabe! Bitte nur Zahlen eingeben.");
-                                System.out.print("Bitte wählen: ");
-                            }
-                        }
+                        int gastwahl = liesMenueAuswahl(scanner, "Bitte wählen: ", 0, 7);
                         switch (gastwahl) {
                             case 1:
                                 hotel.zeigeAlleZimmer();
@@ -192,16 +191,7 @@ public class Main {     // Hauptklasse für die Hotelverwaltung
                         System.out.println("2. Mitarbeiter auflisten");
                         System.out.println("3. Einsatzplan anzeigen");
                         System.out.println("0. Zurück zum Hauptmenü");
-                        System.out.print("Bitte wählen: ");
-                        int mitarbeiterwahl = -1;
-                        while (mitarbeiterwahl == -1) {
-                            try {
-                                mitarbeiterwahl = Integer.parseInt(scanner.nextLine());
-                            } catch (NumberFormatException e) {
-                                System.out.println("Ungültige Eingabe! Bitte nur Zahlen eingeben.");
-                                System.out.print("Bitte wählen: ");
-                            }
-                        }
+                        int mitarbeiterwahl = liesMenueAuswahl(scanner, "Bitte wählen: ", 0, 3);
                         switch (mitarbeiterwahl) {          // Auswahl nach Menüpunkt
                             case 1:
                                 if (mitarbeiterVerwaltung == null) mitarbeiterVerwaltung = new MitarbeiterVerwaltung();
@@ -274,16 +264,7 @@ public class Main {     // Hauptklasse für die Hotelverwaltung
                         System.out.println("3. Bewertungsdurchschnitt und Kommentare anzeigen");
                         System.out.println("4. Essensverbrauch insgesamt anzeigen");
                         System.out.println("0. Zurück zum Hauptmenü");
-                        System.out.print("Bitte wählen: ");
-                        int statistikwahl = -1;
-                        while (statistikwahl == -1) {
-                            try {
-                                statistikwahl = Integer.parseInt(scanner.nextLine());
-                            } catch (NumberFormatException e) {
-                                System.out.println("Ungültige Eingabe! Bitte nur Zahlen eingeben.");
-                                System.out.print("Bitte wählen: ");
-                            }
-                        }
+                        int statistikwahl = liesMenueAuswahl(scanner, "Bitte wählen: ", 0, 4);
                         switch (statistikwahl) {
                             case 1:     // Gesamteinnahmen anzeigen
                                 double gesamt = hotel.berechneEinnahmenGesamt();
