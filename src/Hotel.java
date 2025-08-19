@@ -1,12 +1,12 @@
 import java.util.*;
 
-public class Hotel {
+public class Hotel {        // Klasse Hotel
     private List<Zimmer> zimmerListe;
     private List<Bewertung> bewertungen = new ArrayList<>();
     private List<String> reinigungsplan = new ArrayList<>();
     private int zimmerserviceEssenGesamt = 0;
 
-    public Hotel() {
+    public Hotel() {        // Konstruktor der Hotel-Klasse initialisiert die Zimmerliste
         zimmerListe = new ArrayList<>();   //Generiert automatisch 12 Zimmer, 5 EZ, 5 DZ, 2 Suiten
         int nummer = 1;
         for (int i = 0; i < 5; i++) {
@@ -20,7 +20,7 @@ public class Hotel {
         }
     }
 
-    public boolean reserveZimmer(int zimmernummer, String gastName) {
+    public boolean reserveZimmer(int zimmernummer, String gastName) {       // Methode zum Reservieren eines Zimmers
         for (Zimmer z : zimmerListe) {
             if (z.getZimmernummer() == zimmernummer) {
                 if (!z.isBelegt() && !z.isReserviert()) {  //Falls Zimmer !NICHT! belegt und !NICHT! reserviert
@@ -39,7 +39,7 @@ public class Hotel {
         System.out.println("Zimmer " + zimmernummer + " existiert nicht.");
         return false;
     }
-    public void bestelleZimmerservice(int zimmernummer, int personen) {
+    public void bestelleZimmerservice(int zimmernummer, int personen) {     // Methode zum Bestellen von Zimmerservice
         Zimmer zimmer = null;
         for (Zimmer z : zimmerListe) {
             if (z.getZimmernummer() == zimmernummer) {
@@ -47,16 +47,16 @@ public class Hotel {
                 break;
             }
         }
-        if (zimmer == null) {
+        if (zimmer == null) {       // Falls Zimmer nicht gefunden
             System.out.println("Zimmer existiert nicht.");
             return;
         }
-        if (!zimmer.isBelegt()) {
+        if (!zimmer.isBelegt()) {       // Falls Zimmer nicht belegt
             System.out.println("Zimmer ist nicht belegt.");
             return;
         }
         int maxPersonen = zimmer.getMaxPersonen();
-        if (personen < 1 || personen > maxPersonen) {
+        if (personen < 1 || personen > maxPersonen) {       // Falls ungültige Personenanzahl
             System.out.println("Ungültige Personenanzahl. Maximal erlaubt: " + maxPersonen);
             return;
         }
@@ -64,11 +64,11 @@ public class Hotel {
         System.out.println("Zimmerservice für " + personen + " Person(en) auf Zimmer " + zimmernummer + " bestellt.");
     }
 
-    public int getZimmerserviceEssenGesamt() {
+    public int getZimmerserviceEssenGesamt() {      // Methode zum Abrufen der Gesamtanzahl an Zimmerservice-Essen
         return zimmerserviceEssenGesamt;
     }
 
-    public int berechneEssenVerbrauchGesamt() {
+    public int berechneEssenVerbrauchGesamt() {     // Methode zum Berechnen des gesamten Essensverbrauchs
         int gesamt = 0;
         for (Zimmer zimmer : zimmerListe) {
             int personen = zimmer.getMaxPersonen();
@@ -85,18 +85,18 @@ public class Hotel {
         return gesamt;
     }
 
-    public void zeigeAlleZimmer() {
+    public void zeigeAlleZimmer() {     // Methode zum Anzeigen aller Zimmer
         for (Zimmer z : zimmerListe) {
             System.out.println(z.toString() + ", Ausstattung: " + z.getAusstattung());
         }
     }
 
-    public List<Zimmer> getZimmerListe() {
+    public List<Zimmer> getZimmerListe() {      // getter für die Zimmerliste
 
         return zimmerListe;
     }
 
-    public boolean checkIn(int zimmernummer) {
+    public boolean checkIn(int zimmernummer) {      // Methode zum Check-in eines Zimmers
         for (Zimmer z : zimmerListe) {
             if (z.getZimmernummer() == zimmernummer) {
                 if (!z.isBelegt()) {
@@ -113,7 +113,7 @@ public class Hotel {
         return false;
     }
 
-    public boolean checkOut(int zimmernummer) {
+    public boolean checkOut(int zimmernummer) {     // Methode zum Check-out eines Zimmers
         for (Zimmer z : zimmerListe) {
             if (z.getZimmernummer() == zimmernummer) {
                 if (z.isBelegt()) {
@@ -135,7 +135,7 @@ public class Hotel {
         return false;
     }
 
-    public boolean bucheVerpflegung(int zimmernummer, Verpflegung verpflegung) {
+    public boolean bucheVerpflegung(int zimmernummer, Verpflegung verpflegung) {      // Methode zum Buchen von Verpflegung für ein Zimmer
         for (Zimmer z : zimmerListe) {
             if (z.getZimmernummer() == zimmernummer) {
                 if (!z.isBelegt()) {
@@ -151,11 +151,11 @@ public class Hotel {
         return false;
     }
 
-    public void addBewertung(int sterne, String kommentar) {
+    public void addBewertung(int sterne, String kommentar) {        // Methode zum Hinzufügen einer Bewertung
         bewertungen.add(new Bewertung(sterne, kommentar));
     }
 
-    public void zeigeBewertungenStatistik() {
+    public void zeigeBewertungenStatistik() {       // Methode zum Anzeigen der Bewertungen und deren Statistik
         if (bewertungen.isEmpty()) {
             System.out.println("Noch keine Bewertungen vorhanden.");
             return;
@@ -172,7 +172,7 @@ public class Hotel {
         }
     }
 
-    public double berechneEinnahmenGesamt() {
+    public double berechneEinnahmenGesamt() {       // Methode zum Berechnen der Gesamteinnahmen
         double summe = 0;
         for (Zimmer z : zimmerListe) {
             if (z.isBelegt() || z.isAusgecheckt()) {
@@ -182,7 +182,7 @@ public class Hotel {
         return summe;
     }
 
-    public void zeigeAuslastungProKategorie() {
+    public void zeigeAuslastungProKategorie() {     // Methode zum Anzeigen der Auslastung pro Zimmerkategorie
         int ezGesamt = 0, ezBelegt = 0;
         int dzGesamt = 0, dzBelegt = 0;
         int suiteGesamt = 0, suiteBelegt = 0;
@@ -202,7 +202,7 @@ public class Hotel {
                     break;
             }
         }
-        int ezProzent = ezBelegt * 100 / ezGesamt;
+        int ezProzent = ezBelegt * 100 / ezGesamt;      // Berechnung der Auslastung in Prozent
         int dzProzent = dzBelegt * 100 / dzGesamt;
         int suiteProzent = suiteBelegt * 100 / suiteGesamt;
         System.out.println("Einzelzimmer: " + ezBelegt + "/" + ezGesamt + " belegt. " + "Auslastung: " + ezProzent + "%");
@@ -210,7 +210,7 @@ public class Hotel {
         System.out.println("Suiten: " + suiteBelegt + "/" + suiteGesamt + " belegt. " + "Auslastung: " + suiteProzent + "%");
     }
 
-    public void zeigeReinigungsplan() {
+    public void zeigeReinigungsplan() {     // Methode zum Anzeigen des Reinigungsplans
         if (reinigungsplan.isEmpty()) {
             System.out.println("Noch keine Zimmer gereinigt.");
         } else {

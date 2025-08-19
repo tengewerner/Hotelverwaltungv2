@@ -3,16 +3,16 @@ import java.util.*;
 public class MitarbeiterVerwaltung {
     private List<Mitarbeiter> mitarbeiterListe;
 
-    public MitarbeiterVerwaltung() {
+    public MitarbeiterVerwaltung() {        // Konstruktor der MitarbeiterVerwaltung-Klasse initialisiert die Mitarbeiterliste
         mitarbeiterListe = new ArrayList<>();
     }
 
-    public void addMitarbeiter(String name, Rolle rolle, Schicht schicht) {
+    public void addMitarbeiter(String name, Rolle rolle, Schicht schicht) {     // Methode zum Hinzufügen eines Mitarbeiters
         mitarbeiterListe.add(new Mitarbeiter(name, rolle, schicht));
         System.out.println("Mitarbeiter hinzugefügt: " + name + ", Rolle: " + rolle + ", Schicht: " + schicht);
     }
 
-    public void listMitarbeiter() {
+    public void listMitarbeiter() {     // Methode zum Auflisten aller Mitarbeiter
         if (mitarbeiterListe.isEmpty()) {
             System.out.println("Keine Mitarbeiter vorhanden.");
             return;
@@ -22,12 +22,12 @@ public class MitarbeiterVerwaltung {
         }
     }
 
-    public void zeigeEinsatzplan() {
+    public void zeigeEinsatzplan() {        // Methode zum Anzeigen des Einsatzplans
         if (mitarbeiterListe.isEmpty()) {
             System.out.println("Keine Mitarbeiter vorhanden.");
             return;
         }
-        for (Schicht s : Schicht.values()) {
+        for (Schicht s : Schicht.values()) {        // geht alle Schichten durch
             System.out.println("Schicht: " + s);
             boolean found = false;
             for (Mitarbeiter m : mitarbeiterListe) {

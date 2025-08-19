@@ -1,12 +1,12 @@
 import java.util.Scanner;
 
-public class Main {
+public class Main {     // Hauptklasse für die Hotelverwaltung
     public static void main(String[] args) {
         Hotel hotel = new Hotel();
         MitarbeiterVerwaltung mitarbeiterVerwaltung = null;
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
-        while (running) {
+        while (running) {                               // Hauptmenü
             System.out.println("\n--- Hauptmenü ---");
             System.out.println("1. Gästeverwaltung");
             System.out.println("2. Mitarbeiterverwaltung");
@@ -15,7 +15,7 @@ public class Main {
             System.out.print("Bitte wählen: ");
             int hauptwahl = scanner.nextInt();
             scanner.nextLine();
-            switch (hauptwahl) {
+            switch (hauptwahl) {            // Auswahl nach Menüpunkt
                 case 1:
                     boolean gastMenue = true;
                     while (gastMenue) {
@@ -101,7 +101,7 @@ public class Main {
                                     }
                                 }
                                 Verpflegung verpflegung;
-                                if (auswahl == 1) {
+                                if (auswahl == 1) {             // Auswahl der Verpflegungsart
                                     verpflegung = Verpflegung.VOLLPENSION;
                                 } else if (auswahl == 2) {
                                     verpflegung = Verpflegung.HALBPENSION;
@@ -130,7 +130,7 @@ public class Main {
                         }
                     }
                     break;
-                case 2:
+                case 2:         // Mitarbeiterverwaltung
                     boolean mitarbeiterMenue = true;
                     while (mitarbeiterMenue) {
                         System.out.println("\n--- Mitarbeiterverwaltung ---");
@@ -141,7 +141,7 @@ public class Main {
                         System.out.print("Bitte wählen: ");
                         int mitarbeiterwahl = scanner.nextInt();
                         scanner.nextLine();
-                        switch (mitarbeiterwahl) {
+                        switch (mitarbeiterwahl) {          // Auswahl nach Menüpunkt
                             case 1:
                                 if (mitarbeiterVerwaltung == null) mitarbeiterVerwaltung = new MitarbeiterVerwaltung();
                                 System.out.print("Name des Mitarbeiters: ");
@@ -150,7 +150,7 @@ public class Main {
                                 int rolleNr = scanner.nextInt();
                                 scanner.nextLine();
                                 Rolle rolle = null;
-                                switch (rolleNr) {
+                                switch (rolleNr) {      // Auswahl der Rolle
                                     case 1: rolle = Rolle.REZEPTIONIST; break;
                                     case 2: rolle = Rolle.KUECHENPERSONAL; break;
                                     case 3: rolle = Rolle.REINIGUNGSPERSONAL; break;
@@ -160,7 +160,7 @@ public class Main {
                                 int schichtNr = scanner.nextInt();
                                 scanner.nextLine();
                                 Schicht schicht = null;
-                                switch (schichtNr) {
+                                switch (schichtNr) {        // Auswahl der Schicht
                                     case 1: schicht = Schicht.FRUEHSCHICHT; break;
                                     case 2: schicht = Schicht.MITTAGSCHICHT; break;
                                     case 3: schicht = Schicht.SPAETSCHICHT; break;
@@ -168,15 +168,15 @@ public class Main {
                                 }
                                 mitarbeiterVerwaltung.addMitarbeiter(name, rolle, schicht);
                                 break;
-                            case 2:
+                            case 2:     // Mitarbeiter auflisten
                                 if (mitarbeiterVerwaltung == null) mitarbeiterVerwaltung = new MitarbeiterVerwaltung();
                                 mitarbeiterVerwaltung.listMitarbeiter();
                                 break;
-                            case 3:
+                            case 3:     // Einsatzplan anzeigen
                                 if (mitarbeiterVerwaltung == null) mitarbeiterVerwaltung = new MitarbeiterVerwaltung();
                                 mitarbeiterVerwaltung.zeigeEinsatzplan();
                                 break;
-                            case 0:
+                            case 0:     // Zurück zum Hauptmenü
                                 mitarbeiterMenue = false;
                                 break;
                             default:
@@ -184,9 +184,9 @@ public class Main {
                         }
                     }
                     break;
-                case 3:
+                case 3:     // Statistik
                     boolean statistikMenue = true;
-                    while (statistikMenue) {
+                    while (statistikMenue) {        // Statistikmenü
                         System.out.println("\n--- Statistik ---");
                         System.out.println("1. Gesamteinnahmen (inkl. ausgecheckte Gäste) anzeigen");
                         System.out.println("2. Auslastung pro Kategorie anzeigen");
@@ -197,21 +197,21 @@ public class Main {
                         int statistikwahl = scanner.nextInt();
                         scanner.nextLine();
                         switch (statistikwahl) {
-                            case 1:
+                            case 1:     // Gesamteinnahmen anzeigen
                                 double gesamt = hotel.berechneEinnahmenGesamt();
                                 System.out.println("Gesamteinnahmen (inkl. ausgecheckte Gäste): " + gesamt);
                                 break;
-                            case 2:
+                            case 2:     // Auslastung pro Kategorie anzeigen
                                 hotel.zeigeAuslastungProKategorie();
                                 break;
-                            case 3:
+                            case 3:     // Bewertungsdurchschnitt und Kommentare anzeigen
                                 hotel.zeigeBewertungenStatistik();
                                 break;
-                                case 4:
+                                case 4:     // Essensverbrauch insgesamt anzeigen
                                     int essenGesamt = hotel.berechneEssenVerbrauchGesamt();
                                     System.out.println("Insgesamt verbrauchtes Essen: " + essenGesamt + " Portionen");
                                     break;
-                            case 0:
+                            case 0:     // Zurück zum Hauptmenü
                                 statistikMenue = false;
                                 break;
                             default:
@@ -219,11 +219,11 @@ public class Main {
                         }
                     }
                     break;
-                case 0:
+                case 0:     // Beenden des Programms
                     running = false;
                     System.out.println("Programm beendet.");
                     break;
-                default:
+                default:        // Ungültige Auswahl
                     System.out.println("Ungültige Auswahl!");
             }
         }
