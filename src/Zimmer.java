@@ -1,6 +1,8 @@
+import java.io.Serializable;
 import java.util.*;
 
-public class Zimmer {       // Klasse für die Zimmerverwaltung in einem Hotel
+public class Zimmer implements Serializable {       // Klasse für die Zimmerverwaltung in einem Hotel
+    private static final long serialVersionUID = 1L;
     private int zimmernummer;
     private zimmerTyp typ;
     private boolean belegt;

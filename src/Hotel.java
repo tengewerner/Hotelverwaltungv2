@@ -1,6 +1,8 @@
+import java.io.Serializable;
 import java.util.*;
 
-public class Hotel {        // Klasse Hotel
+public class Hotel implements Serializable {        // Klasse Hotel
+    private static final long serialVersionUID = 1L;
     private List<Zimmer> zimmerListe;
     private List<Bewertung> bewertungen = new ArrayList<>();
     private List<String> reinigungsplan = new ArrayList<>();

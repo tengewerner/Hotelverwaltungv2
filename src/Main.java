@@ -1,4 +1,6 @@
 import java.util.Scanner;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 public class Main {
     // Hilfsmethode für Menü-Auswahl mit Bereichsprüfung
@@ -19,10 +21,21 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        Hotel hotel = new Hotel();
-        MitarbeiterVerwaltung mitarbeiterVerwaltung = null;
+        Hotel hotel;
+        MitarbeiterVerwaltung mitarbeiterVerwaltung;
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
+
+        // Laden beim Start
+        hotel = StorageManager.load();
+        if (hotel == null) hotel = new Hotel();
+        // MitarbeiterVerwaltung analog laden
+        try (ObjectInputStream ois = new ObjectInputStream(java.nio.file.Files.newInputStream(java.nio.file.Path.of("mitarbeiterverwaltung.ser")))) {
+            mitarbeiterVerwaltung = (MitarbeiterVerwaltung) ois.readObject();
+        } catch (Exception e) {
+            mitarbeiterVerwaltung = new MitarbeiterVerwaltung();
+        }
+
         while (running) {
             System.out.println("\n--- Hauptmenü ---");
             System.out.println("1. Gästeverwaltung");
@@ -295,6 +308,13 @@ public class Main {
                 default:        // Ungültige Auswahl
                     System.out.println("Ungültige Auswahl!");
             }
+        }
+        // Speichern beim Beenden
+        StorageManager.save(hotel);
+        try (ObjectOutputStream oos = new ObjectOutputStream(java.nio.file.Files.newOutputStream(java.nio.file.Path.of("mitarbeiterverwaltung.ser")))) {
+            oos.writeObject(mitarbeiterVerwaltung);
+        } catch (Exception e) {
+            System.err.println("Fehler beim Speichern der MitarbeiterVerwaltung: " + e.getMessage());
         }
         scanner.close();
     }

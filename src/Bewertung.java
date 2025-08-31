@@ -1,4 +1,7 @@
-public class Bewertung {        // Klasse Bewertung
+import java.io.Serializable;
+
+public class Bewertung implements Serializable {        // Klasse Bewertung
+    private static final long serialVersionUID = 1L;
     private int sterne; // 1-5
     private String kommentar;
 
@@ -20,4 +23,3 @@ public class Bewertung {        // Klasse Bewertung
         return "Bewertung: " + sterne + "/5 - Kommentar: " + kommentar;
     }
 }
-

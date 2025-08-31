@@ -1,4 +1,7 @@
-public class Mitarbeiter {      // Klasse Mitarbeite
+import java.io.Serializable;
+
+public class Mitarbeiter implements Serializable {      // Klasse Mitarbeite
+    private static final long serialVersionUID = 1L;
     private String name;
     private Rolle rolle;
     private Schicht schicht;
@@ -26,4 +29,3 @@ public class Mitarbeiter {      // Klasse Mitarbeite
         return "Mitarbeiter: " + name + ", Rolle: " + rolle + ", Schicht: " + schicht;
     }
 }
-

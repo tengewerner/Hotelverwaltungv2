@@ -1,6 +1,8 @@
+import java.io.Serializable;
 import java.util.*;
 
-public class MitarbeiterVerwaltung {
+public class MitarbeiterVerwaltung implements Serializable {
+    private static final long serialVersionUID = 1L;
     private List<Mitarbeiter> mitarbeiterListe;
 
     public MitarbeiterVerwaltung() {        // Konstruktor der MitarbeiterVerwaltung-Klasse initialisiert die Mitarbeiterliste
