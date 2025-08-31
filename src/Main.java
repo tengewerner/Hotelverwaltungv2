@@ -20,7 +20,7 @@ public class Main {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) {        // Hauptmethode
         Hotel hotel;
         MitarbeiterVerwaltung mitarbeiterVerwaltung;
         Scanner scanner = new Scanner(System.in);
@@ -30,7 +30,7 @@ public class Main {
         hotel = StorageManager.load();
         if (hotel == null) hotel = new Hotel();
         // MitarbeiterVerwaltung analog laden
-        try (ObjectInputStream ois = new ObjectInputStream(java.nio.file.Files.newInputStream(java.nio.file.Path.of("mitarbeiterverwaltung.ser")))) {
+        try (ObjectInputStream ois = new ObjectInputStream(java.nio.file.Files.newInputStream(java.nio.file.Path.of("mitarbeiterverwaltung.ser")))) {       // Pfad zur Datei anpassen
             mitarbeiterVerwaltung = (MitarbeiterVerwaltung) ois.readObject();
         } catch (Exception e) {
             mitarbeiterVerwaltung = new MitarbeiterVerwaltung();
@@ -310,8 +310,8 @@ public class Main {
             }
         }
         // Speichern beim Beenden
-        StorageManager.save(hotel);
-        try (ObjectOutputStream oos = new ObjectOutputStream(java.nio.file.Files.newOutputStream(java.nio.file.Path.of("mitarbeiterverwaltung.ser")))) {
+        StorageManager.save(hotel);     // Hotelverwaltung speichern
+        try (ObjectOutputStream oos = new ObjectOutputStream(java.nio.file.Files.newOutputStream(java.nio.file.Path.of("mitarbeiterverwaltung.ser")))) {        // Pfad zur Datei anpassen
             oos.writeObject(mitarbeiterVerwaltung);
         } catch (Exception e) {
             System.err.println("Fehler beim Speichern der MitarbeiterVerwaltung: " + e.getMessage());
