@@ -2,10 +2,10 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class StorageManager {
+public class StorageManager {       // Klasse zum Speichern und Laden der Hotelverwaltung
     private static final String DATEINAME = "hotelverwaltung.ser";
 
-    public static void save(Hotel hotel) {
+    public static void save(Hotel hotel) {      // Methode zum Speichern der Hotelverwaltung in eine Datei
         try (ObjectOutputStream oos = new ObjectOutputStream(Files.newOutputStream(Path.of(DATEINAME)))) {
             oos.writeObject(hotel);
         } catch (IOException e) {
@@ -13,7 +13,7 @@ public class StorageManager {
         }
     }
 
-    public static Hotel load() {
+    public static Hotel load() {        // Methode zum Laden der Hotelverwaltung aus einer Datei
         try (ObjectInputStream ois = new ObjectInputStream(Files.newInputStream(Path.of(DATEINAME)))) {
             return (Hotel) ois.readObject();
         } catch (IOException | ClassNotFoundException e) {

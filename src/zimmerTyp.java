@@ -16,15 +16,15 @@ public enum zimmerTyp {     // Enum für die verschiedenen Zimmertypen im Hotel
         this.ausstattung = ausstattung;
     }
 
-    public double getPreisProNacht() {
+    public double getPreisProNacht() {      // Getter für den Preis pro Nacht
         return preisProNacht;
     }
 
-    public int getMaxPersonen() {
+    public int getMaxPersonen() {       // Getter für die maximale Anzahl an Personen
         return maxPersonen;
     }
 
-    public List<String> getAusstattung() {
+    public List<String> getAusstattung() {      // Getter für die Ausstattung des Zimmertyps
         return ausstattung;
     }
 }
