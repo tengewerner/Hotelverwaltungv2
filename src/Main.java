@@ -2,13 +2,29 @@ import java.util.Scanner;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+/**
+ * Startklasse für die Hotelverwaltung.
+ * <p>
+ * Stellt Hauptmenü, Gästeverwaltung, Mitarbeiterverwaltung und Statistik bereit.
+ * </p>
+ */
 public class Main {
-    // Hilfsmethode für Menü-Auswahl mit Bereichsprüfung
+
+    /**
+     * Hilfsmethode zum Einlesen einer Menüauswahl mit Bereichsprüfung.
+     *
+     * @param scanner Scanner-Objekt für die Benutzereingabe
+     * @param prompt  Text, der dem Benutzer angezeigt wird
+     * @param min     Minimale gültige Zahl
+     * @param max     Maximale gültige Zahl
+     * @return Ausgewählter Menüpunkt innerhalb des gültigen Bereichs
+     */
     public static int liesMenueAuswahl(Scanner scanner, String prompt, int min, int max) {
         while (true) {
             System.out.print(prompt);
             try {
                 int eingabe = Integer.parseInt(scanner.nextLine());
+                // Prüfen, ob Eingabe im gültigen Bereich liegt
                 if (eingabe >= min && eingabe <= max) {
                     return eingabe;
                 } else {
@@ -20,31 +36,40 @@ public class Main {
         }
     }
 
-    public static void main(String[] args) {        // Hauptmethode
+    /**
+     * Hauptmethode der Anwendung. Zeigt das Hauptmenü an und verwaltet Benutzerinteraktionen.
+     *
+     */
+    public static void main(String[] args) {
         Hotel hotel;
         MitarbeiterVerwaltung mitarbeiterVerwaltung;
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
 
-        // Laden beim Start
+        // Laden der Hotelverwaltung beim Start
         hotel = StorageManager.load();
         if (hotel == null) hotel = new Hotel();
-        // MitarbeiterVerwaltung analog laden
-        try (ObjectInputStream ois = new ObjectInputStream(java.nio.file.Files.newInputStream(java.nio.file.Path.of("mitarbeiterverwaltung.ser")))) {       // Pfad zur Datei anpassen
+
+        // Laden der Mitarbeiterverwaltung
+        try (ObjectInputStream ois = new ObjectInputStream(
+                java.nio.file.Files.newInputStream(java.nio.file.Path.of("mitarbeiterverwaltung.ser")))) {
             mitarbeiterVerwaltung = (MitarbeiterVerwaltung) ois.readObject();
         } catch (Exception e) {
             mitarbeiterVerwaltung = new MitarbeiterVerwaltung();
         }
 
+        // Hauptschleife für das Menü
         while (running) {
             System.out.println("\n--- Hauptmenü ---");
             System.out.println("1. Gästeverwaltung");
             System.out.println("2. Mitarbeiterverwaltung");
             System.out.println("3. Statistik");
             System.out.println("0. Beenden");
+
             int hauptwahl = liesMenueAuswahl(scanner, "Bitte wählen: ", 0, 3);
-            switch (hauptwahl) {            // Auswahl nach Menüpunkt
-                case 1:
+
+            switch (hauptwahl) { // Auswahl nach Menüpunkt
+                case 1: // Gästeverwaltung
                     boolean gastMenue = true;
                     while (gastMenue) {
                         System.out.println("\n--- Gästeverwaltung ---");
@@ -56,14 +81,18 @@ public class Main {
                         System.out.println("6. Reinigungsplan anzeigen");
                         System.out.println("7. Zimmerservice bestellen");
                         System.out.println("0. Zurück zum Hauptmenü");
+
                         int gastwahl = liesMenueAuswahl(scanner, "Bitte wählen: ", 0, 7);
+
                         switch (gastwahl) {
                             case 1:
                                 hotel.zeigeAlleZimmer();
                                 break;
-                            case 2:
+
+                            case 2: // Check-in eines Gastes
                                 System.out.print("Zimmernummer für Check-in: ");
                                 int checkInNr = -1;
+                                // Schleife bis gültige Zahl eingegeben wird
                                 while (checkInNr == -1) {
                                     try {
                                         checkInNr = Integer.parseInt(scanner.nextLine());
@@ -74,10 +103,11 @@ public class Main {
                                 }
                                 hotel.checkIn(checkInNr);
                                 break;
-                            case 3:
+
+                            case 3: // Check-out eines Gastes
                                 System.out.print("Zimmernummer für Check-out: ");
                                 int checkOutNr = -1;
-                                while (checkOutNr == -1) {
+                                while (checkOutNr == -1) { // Prüfen auf gültige Zahl
                                     try {
                                         checkOutNr = Integer.parseInt(scanner.nextLine());
                                     } catch (NumberFormatException e) {
@@ -85,9 +115,11 @@ public class Main {
                                         System.out.print("Zimmernummer für Check-out: ");
                                     }
                                 }
+
                                 boolean checkoutErfolg = hotel.checkOut(checkOutNr);
+
+                                // Bewertung abfragen, wenn Check-out erfolgreich
                                 if (checkoutErfolg) {
-                                    // Bewertung abfragen
                                     int sterne = -1;
                                     while (sterne < 1 || sterne > 5) {
                                         System.out.print("Bitte geben Sie eine Bewertung von 1 bis 5 Sternen ab: ");
@@ -101,8 +133,9 @@ public class Main {
                                             System.out.println("Ungültige Eingabe! Bitte nur Zahlen eingeben.");
                                         }
                                     }
+
                                     String kommentar = "";
-                                    while (kommentar.trim().isEmpty()) {
+                                    while (kommentar.trim().isEmpty()) { // Kommentar darf nicht leer sein
                                         System.out.print("Kommentar zur Bewertung: ");
                                         kommentar = scanner.nextLine();
                                         if (kommentar.trim().isEmpty()) {
@@ -113,7 +146,8 @@ public class Main {
                                     System.out.println("Vielen Dank für Ihre Bewertung!");
                                 }
                                 break;
-                            case 4:
+
+                            case 4: // Zimmer reservieren
                                 System.out.print("Zimmernummer für Reservierung: ");
                                 int resNr = -1;
                                 while (resNr == -1) {
@@ -128,7 +162,8 @@ public class Main {
                                 String gastName = scanner.nextLine();
                                 hotel.reserveZimmer(resNr, gastName);
                                 break;
-                            case 5:
+
+                            case 5: // Verpflegung buchen
                                 System.out.print("Zimmernummer für Verpflegung: ");
                                 int verpfNr = -1;
                                 while (verpfNr == -1) {
@@ -139,6 +174,8 @@ public class Main {
                                         System.out.print("Zimmernummer für Verpflegung: ");
                                     }
                                 }
+
+                                // Auswahl der Verpflegungsoption
                                 System.out.println("Verpflegungsoptionen: 1. Vollpension 2. Halbpension 3. Frühstück");
                                 int auswahl = -1;
                                 while (auswahl < 1 || auswahl > 3) {
@@ -152,20 +189,20 @@ public class Main {
                                         System.out.println("Ungültige Eingabe! Bitte nur Zahlen eingeben.");
                                     }
                                 }
+
                                 Verpflegung verpflegung;
-                                if (auswahl == 1) {             // Auswahl der Verpflegungsart
-                                    verpflegung = Verpflegung.VOLLPENSION;
-                                } else if (auswahl == 2) {
-                                    verpflegung = Verpflegung.HALBPENSION;
-                                } else {
-                                    verpflegung = Verpflegung.FRUEHSTUECK;
-                                }
+                                if (auswahl == 1) verpflegung = Verpflegung.VOLLPENSION;
+                                else if (auswahl == 2) verpflegung = Verpflegung.HALBPENSION;
+                                else verpflegung = Verpflegung.FRUEHSTUECK;
+
                                 hotel.bucheVerpflegung(verpfNr, verpflegung);
                                 break;
-                            case 6:
+
+                            case 6: // Reinigungsplan anzeigen
                                 hotel.zeigeReinigungsplan();
                                 break;
-                            case 7:
+
+                            case 7: // Zimmerservice bestellen
                                 System.out.print("Zimmernummer für Zimmerservice: ");
                                 int zsNr = -1;
                                 while (zsNr == -1) {
@@ -176,6 +213,7 @@ public class Main {
                                         System.out.print("Zimmernummer für Zimmerservice: ");
                                     }
                                 }
+
                                 System.out.print("Für wie viele Personen soll Essen bestellt werden? ");
                                 int pers = -1;
                                 while (pers == -1) {
@@ -186,17 +224,21 @@ public class Main {
                                         System.out.print("Für wie viele Personen soll Essen bestellt werden? ");
                                     }
                                 }
+
                                 hotel.bestelleZimmerservice(zsNr, pers);
                                 break;
-                            case 0:
+
+                            case 0: // Zurück zum Hauptmenü
                                 gastMenue = false;
                                 break;
+
                             default:
                                 System.out.println("Ungültige Auswahl!");
                         }
                     }
                     break;
-                case 2:         // Mitarbeiterverwaltung
+
+                case 2: // Mitarbeiterverwaltung
                     boolean mitarbeiterMenue = true;
                     while (mitarbeiterMenue) {
                         System.out.println("\n--- Mitarbeiterverwaltung ---");
@@ -204,12 +246,16 @@ public class Main {
                         System.out.println("2. Mitarbeiter auflisten");
                         System.out.println("3. Einsatzplan anzeigen");
                         System.out.println("0. Zurück zum Hauptmenü");
+
                         int mitarbeiterwahl = liesMenueAuswahl(scanner, "Bitte wählen: ", 0, 3);
-                        switch (mitarbeiterwahl) {          // Auswahl nach Menüpunkt
-                            case 1:
+
+                        switch (mitarbeiterwahl) {
+                            case 1: // Mitarbeiter erstellen
                                 if (mitarbeiterVerwaltung == null) mitarbeiterVerwaltung = new MitarbeiterVerwaltung();
                                 System.out.print("Name des Mitarbeiters: ");
                                 String name = scanner.nextLine();
+
+                                // Rolle auswählen
                                 System.out.println("Rolle wählen: 1. Rezeptionist 2. Küchenpersonal 3. Reinigungspersonal");
                                 int rolleNr = -1;
                                 while (rolleNr < 1 || rolleNr > 3) {
@@ -223,13 +269,16 @@ public class Main {
                                         System.out.println("Ungültige Eingabe! Bitte nur Zahlen eingeben.");
                                     }
                                 }
+
                                 Rolle rolle = null;
-                                switch (rolleNr) {      // Auswahl der Rolle
+                                switch (rolleNr) {
                                     case 1: rolle = Rolle.REZEPTIONIST; break;
                                     case 2: rolle = Rolle.KUECHENPERSONAL; break;
                                     case 3: rolle = Rolle.REINIGUNGSPERSONAL; break;
                                     default: System.out.println("Ungültige Rolle!"); continue;
                                 }
+
+                                // Schicht auswählen
                                 System.out.println("Schicht wählen: 1. Frühschicht 2. Mittagschicht 3. Spätschicht");
                                 int schichtNr = -1;
                                 while (schichtNr < 1 || schichtNr > 3) {
@@ -243,79 +292,100 @@ public class Main {
                                         System.out.println("Ungültige Eingabe! Bitte nur Zahlen eingeben.");
                                     }
                                 }
+
                                 Schicht schicht = null;
-                                switch (schichtNr) {        // Auswahl der Schicht
+                                switch (schichtNr) {
                                     case 1: schicht = Schicht.FRUEHSCHICHT; break;
                                     case 2: schicht = Schicht.MITTAGSCHICHT; break;
                                     case 3: schicht = Schicht.SPAETSCHICHT; break;
                                     default: System.out.println("Ungültige Schicht!"); continue;
                                 }
+
                                 mitarbeiterVerwaltung.addMitarbeiter(name, rolle, schicht);
                                 break;
-                            case 2:     // Mitarbeiter auflisten
+
+                            case 2: // Mitarbeiter auflisten
                                 if (mitarbeiterVerwaltung == null) mitarbeiterVerwaltung = new MitarbeiterVerwaltung();
                                 mitarbeiterVerwaltung.listMitarbeiter();
                                 break;
-                            case 3:     // Einsatzplan anzeigen
+
+                            case 3: // Einsatzplan anzeigen
                                 if (mitarbeiterVerwaltung == null) mitarbeiterVerwaltung = new MitarbeiterVerwaltung();
                                 mitarbeiterVerwaltung.zeigeEinsatzplan();
                                 break;
-                            case 0:     // Zurück zum Hauptmenü
+
+                            case 0: // Zurück zum Hauptmenü
                                 mitarbeiterMenue = false;
                                 break;
+
                             default:
                                 System.out.println("Ungültige Auswahl!");
                         }
                     }
                     break;
-                case 3:     // Statistik
+
+                case 3: // Statistik
                     boolean statistikMenue = true;
-                    while (statistikMenue) {        // Statistikmenü
+                    while (statistikMenue) { // Statistikmenü
                         System.out.println("\n--- Statistik ---");
                         System.out.println("1. Gesamteinnahmen (inkl. ausgecheckte Gäste) anzeigen");
                         System.out.println("2. Auslastung pro Kategorie anzeigen");
                         System.out.println("3. Bewertungsdurchschnitt und Kommentare anzeigen");
                         System.out.println("4. Essensverbrauch insgesamt anzeigen");
                         System.out.println("0. Zurück zum Hauptmenü");
+
                         int statistikwahl = liesMenueAuswahl(scanner, "Bitte wählen: ", 0, 4);
+
                         switch (statistikwahl) {
-                            case 1:     // Gesamteinnahmen anzeigen
+                            case 1: // Gesamteinnahmen anzeigen
                                 double gesamt = hotel.berechneEinnahmenGesamt();
                                 System.out.println("Gesamteinnahmen (inkl. ausgecheckte Gäste): " + gesamt);
                                 break;
-                            case 2:     // Auslastung pro Kategorie anzeigen
+
+                            case 2: // Auslastung pro Kategorie anzeigen
                                 hotel.zeigeAuslastungProKategorie();
                                 break;
-                            case 3:     // Bewertungsdurchschnitt und Kommentare anzeigen
+
+                            case 3: // Bewertungsdurchschnitt und Kommentare anzeigen
                                 hotel.zeigeBewertungenStatistik();
                                 break;
-                                case 4:     // Essensverbrauch insgesamt anzeigen
-                                    int essenGesamt = hotel.berechneEssenVerbrauchGesamt();
-                                    System.out.println("Insgesamt verbrauchtes Essen: " + essenGesamt + " Portionen");
-                                    break;
-                            case 0:     // Zurück zum Hauptmenü
+
+                            case 4: // Essensverbrauch insgesamt anzeigen
+                                int essenGesamt = hotel.berechneEssenVerbrauchGesamt();
+                                System.out.println("Insgesamt verbrauchtes Essen: " + essenGesamt + " Portionen");
+                                break;
+
+                            case 0: // Zurück zum Hauptmenü
                                 statistikMenue = false;
                                 break;
+
                             default:
                                 System.out.println("Ungültige Auswahl!");
                         }
                     }
                     break;
-                case 0:     // Beenden des Programms
+
+                case 0: // Programm beenden
                     running = false;
                     System.out.println("Programm beendet.");
                     break;
-                default:        // Ungültige Auswahl
+
+                default:
                     System.out.println("Ungültige Auswahl!");
             }
         }
-        // Speichern beim Beenden
-        StorageManager.save(hotel);     // Hotelverwaltung speichern
-        try (ObjectOutputStream oos = new ObjectOutputStream(java.nio.file.Files.newOutputStream(java.nio.file.Path.of("mitarbeiterverwaltung.ser")))) {        // Pfad zur Datei anpassen
+
+        // Speichern der Hotelverwaltung beim Beenden
+        StorageManager.save(hotel);
+
+        // Speichern der Mitarbeiterverwaltung
+        try (ObjectOutputStream oos = new ObjectOutputStream(
+                java.nio.file.Files.newOutputStream(java.nio.file.Path.of("mitarbeiterverwaltung.ser")))) {
             oos.writeObject(mitarbeiterVerwaltung);
         } catch (Exception e) {
             System.err.println("Fehler beim Speichern der MitarbeiterVerwaltung: " + e.getMessage());
         }
+
         scanner.close();
     }
 }

@@ -1,18 +1,32 @@
 import java.io.Serializable;
 import java.util.*;
 
-public class Zimmer implements Serializable {       // Klasse für die Zimmerverwaltung in einem Hotel
+/**
+ * Repräsentiert ein Zimmer in einem Hotel.
+ * <p>
+ * Enthält Informationen über Zimmernummer, Typ, Belegung, Reservierung, Ausstattung und Verpflegung.
+ * </p>
+ */
+public class Zimmer implements Serializable {
     private static final long serialVersionUID = 1L;
-    private int zimmernummer;
-    private zimmerTyp typ;
-    private boolean belegt;
-    private boolean reserviert;
-    private String reservierterGast;
-    private List<String> ausstattung;
-    private Set<Verpflegung> verpflegung;
-    private boolean ausgecheckt = false;
 
-    public Zimmer(int zimmernummer, zimmerTyp typ, List<String> ausstattung) {      // Konstruktor der Zimmer-Klasse
+    private int zimmernummer;             // Eindeutige Zimmernummer
+    private zimmerTyp typ;                // Typ des Zimmers (Einzelzimmer, Doppelzimmer, Suite)
+    private boolean belegt;               // Gibt an, ob das Zimmer belegt ist
+    private boolean reserviert;           // Gibt an, ob das Zimmer reserviert ist
+    private String reservierterGast;      // Name des reservierten Gastes
+    private List<String> ausstattung;     // Liste der Ausstattung des Zimmers
+    private Set<Verpflegung> verpflegung; // Menge der gebuchten Verpflegung (max. 1)
+    private boolean ausgecheckt = false;  // Kennzeichnet, ob der Gast ausgecheckt wurde
+
+    /**
+     * Konstruktor zum Erstellen eines Zimmers.
+     *
+     * @param zimmernummer Eindeutige Zimmernummer
+     * @param typ          Typ des Zimmers
+     * @param ausstattung  Liste der Ausstattung des Zimmers
+     */
+    public Zimmer(int zimmernummer, zimmerTyp typ, List<String> ausstattung) {
         this.zimmernummer = zimmernummer;
         this.typ = typ;
         this.ausstattung = ausstattung;
@@ -22,73 +36,188 @@ public class Zimmer implements Serializable {       // Klasse für die Zimmerver
         this.verpflegung = new HashSet<>();
     }
 
-    public int getZimmernummer() {      // Getter für die Zimmernummer
+    /**
+     * Liefert die Zimmernummer.
+     *
+     * @return Zimmernummer
+     */
+    public int getZimmernummer() {
         return zimmernummer;
     }
-    public zimmerTyp getTyp() {     // Getter für den Zimmertyp
+
+    /**
+     * Liefert den Typ des Zimmers.
+     *
+     * @return Zimmertyp
+     */
+    public zimmerTyp getTyp() {
         return typ;
     }
-    public boolean isBelegt() {     // Prüft, ob das Zimmer belegt ist
+
+    /**
+     * Prüft, ob das Zimmer belegt ist.
+     *
+     * @return true, falls belegt, sonst false
+     */
+    public boolean isBelegt() {
         return belegt;
     }
-    public void setBelegt(boolean belegt) {     // Setzt den Belegungsstatus des Zimmers
+
+    /**
+     * Setzt den Belegungsstatus des Zimmers.
+     * <p>
+     * Beim Belegen wird das Zimmer automatisch als nicht ausgecheckt markiert.
+     * </p>
+     *
+     * @param belegt Belegungsstatus
+     */
+    public void setBelegt(boolean belegt) {
         this.belegt = belegt;
         if (belegt) {
             this.ausgecheckt = false;
         }
     }
-    public boolean isReserviert() {     // Prüft, ob das Zimmer reserviert ist
+
+    /**
+     * Prüft, ob das Zimmer reserviert ist.
+     *
+     * @return true, falls reserviert, sonst false
+     */
+    public boolean isReserviert() {
         return reserviert;
     }
-    public String getReservierterGast() {       // Gibt den Namen des reservierten Gastes zurück
+
+    /**
+     * Liefert den Namen des reservierten Gastes.
+     *
+     * @return Name des reservierten Gastes oder null, falls nicht reserviert
+     */
+    public String getReservierterGast() {
         return reservierterGast;
     }
-    public void reservieren(String gastName) {      // Reserviert das Zimmer für einen Gast
+
+    /**
+     * Reserviert das Zimmer für einen Gast.
+     *
+     * @param gastName Name des Gastes
+     */
+    public void reservieren(String gastName) {
         this.reserviert = true;
         this.reservierterGast = gastName;
     }
-    public void stornieren() {      // Storniert die Reservierung des Zimmers
+
+    /**
+     * Storniert die Reservierung des Zimmers.
+     * <p>
+     * Markiert das Zimmer als ausgecheckt.
+     * </p>
+     */
+    public void stornieren() {
         this.reserviert = false;
         this.reservierterGast = null;
         this.ausgecheckt = true;
     }
-    public List<String> getAusstattung() {      // Gibt die Ausstattung des Zimmers zurück
+
+    /**
+     * Liefert die Ausstattung des Zimmers.
+     *
+     * @return Liste der Ausstattungsmerkmale
+     */
+    public List<String> getAusstattung() {
         return ausstattung;
     }
+
+    /**
+     * Liefert die aktuell gebuchte Verpflegung.
+     *
+     * @return Verpflegung oder null, falls keine gebucht
+     */
     public Verpflegung getVerpflegung() {
         if (verpflegung.isEmpty()) return null;
-        return verpflegung.iterator().next(); // Gibt die erste Verpflegung zurück, falls vorhanden
+        return verpflegung.iterator().next(); // Gibt die erste Verpflegung zurück
     }
 
-    public void bucheVerpflegung(Verpflegung verpflegung) {     // Bucht eine Verpflegung für das Zimmer
+    /**
+     * Bucht eine Verpflegung für das Zimmer.
+     * <p>
+     * Vorherige Verpflegung wird gelöscht.
+     * </p>
+     *
+     * @param verpflegung Verpflegung, die gebucht werden soll
+     */
+    public void bucheVerpflegung(Verpflegung verpflegung) {
         this.verpflegung.clear();
         this.verpflegung.add(verpflegung);
     }
 
-    public void storniereVerpflegung() {        // Storniert die Verpflegung des Zimmers
+    /**
+     * Storniert die gebuchte Verpflegung.
+     */
+    public void storniereVerpflegung() {
         this.verpflegung.clear();
     }
 
-    public int getMaxPersonen() {       // Gibt die maximale Personenanzahl für das Zimmer zurück
+    /**
+     * Liefert die maximale Anzahl an Personen für das Zimmer.
+     *
+     * @return Maximale Personenanzahl
+     */
+    public int getMaxPersonen() {
         return typ.getMaxPersonen();
     }
+
+    /**
+     * Liefert den Preis pro Nacht des Zimmers.
+     *
+     * @return Preis pro Nacht
+     */
     public double getPreisProNacht() {
         return typ.getPreisProNacht();
     }
+
+    /**
+     * Prüft, ob das Zimmer bereits ausgecheckt wurde.
+     *
+     * @return true, falls ausgecheckt, sonst false
+     */
     public boolean isAusgecheckt() {
         return ausgecheckt;
     }
+
+    /**
+     * Setzt den ausgecheckt-Status des Zimmers.
+     *
+     * @param ausgecheckt true, falls ausgecheckt, sonst false
+     */
     public void setAusgecheckt(boolean ausgecheckt) {
         this.ausgecheckt = ausgecheckt;
     }
+
+    /**
+     * Liefert den Preis des Zimmers (identisch mit Preis pro Nacht).
+     *
+     * @return Preis des Zimmers
+     */
     public double getPreis() {
         return getPreisProNacht();
     }
 
+    /**
+     * Überschreibt die Standard-String-Repräsentation.
+     * <p>
+     * Zeigt Zimmernummer, Typ, maximale Personen, Preis, Status und gebuchte Verpflegung an.
+     * </p>
+     *
+     * @return Formatierter String mit Zimmerinformationen
+     */
     @Override
-    public String toString() {    // Überschreibt die toString-Methode für eine bessere Ausgabe
+    public String toString() {
+        // Nicht-triviale Bedingung: Statusanzeige abhängig von belegt, reserviert oder frei
         String status = belegt ? "belegt" : (reserviert ? "reserviert für " + reservierterGast : "frei");
+
+        // Prüfen, ob Verpflegung gebucht ist
         String verpflegungStr = verpflegung.isEmpty() ? "keine Verpflegung gebucht" : "Verpflegung: " + getVerpflegung();
+
         return "Zimmer " + zimmernummer + " (" + typ + ") - max. Personen: " + getMaxPersonen() +
                 ", Preis/Nacht: " + getPreisProNacht() + "€, Status: " + status + ", " + verpflegungStr;
     }
