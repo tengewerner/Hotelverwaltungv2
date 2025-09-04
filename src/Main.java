@@ -92,7 +92,6 @@ public class Main {
                             case 2: // Check-in eines Gastes
                                 System.out.print("Zimmernummer für Check-in: ");
                                 int checkInNr = -1;
-                                // Schleife bis gültige Zahl eingegeben wird
                                 while (checkInNr == -1) {
                                     try {
                                         checkInNr = Integer.parseInt(scanner.nextLine());
@@ -101,7 +100,9 @@ public class Main {
                                         System.out.print("Zimmernummer für Check-in: ");
                                     }
                                 }
-                                hotel.checkIn(checkInNr);
+                                System.out.print("Name der Hauptperson für Check-in: ");
+                                String hauptGast = scanner.nextLine();
+                                hotel.checkIn(checkInNr, hauptGast);
                                 break;
 
                             case 3: // Check-out eines Gastes
@@ -214,7 +215,7 @@ public class Main {
                                     }
                                 }
 
-                                System.out.print("Für wie viele Personen soll Essen bestellt werden? ");
+                                System.out.print("Wie viele Portionen Essen sollen bestellt werden? ");
                                 int pers = -1;
                                 while (pers == -1) {
                                     try {

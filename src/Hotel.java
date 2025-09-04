@@ -66,9 +66,9 @@ public class Hotel implements Serializable {        // Klasse Hotel
      * Bestellt Zimmerservice für eine bestimmte Anzahl an Personen in einem Zimmer.
      *
      * @param zimmernummer Zimmernummer
-     * @param personen     Anzahl der Personen
+     * @param portionen    Anzahl der Portionen
      */
-    public void bestelleZimmerservice(int zimmernummer, int personen) {
+    public void bestelleZimmerservice(int zimmernummer, int portionen) {
         Zimmer zimmer = null;
 
         // Zimmer anhand der Nummer suchen
@@ -88,15 +88,14 @@ public class Hotel implements Serializable {        // Klasse Hotel
             return;
         }
 
-        int maxPersonen = zimmer.getMaxPersonen();
-        // Bedingung: Personenanzahl muss gültig sein
-        if (personen < 1 || personen > maxPersonen) {
-            System.out.println("Ungültige Personenanzahl. Maximal erlaubt: " + maxPersonen);
+        // Portionen müssen mindestens 1 sein
+        if (portionen < 1) {
+            System.out.println("Ungültige Anzahl Portionen. Mindestens 1 Portion muss bestellt werden.");
             return;
         }
 
-        zimmerserviceEssenGesamt += personen;  // Zimmerservice summiert sich auf
-        System.out.println("Zimmerservice für " + personen + " Person(en) auf Zimmer " + zimmernummer + " bestellt.");
+        zimmerserviceEssenGesamt += portionen;  // Zimmerservice summiert sich auf
+        System.out.println("Zimmerservice für " + portionen + " Portion(en) auf Zimmer " + zimmernummer + " bestellt.");
     }
 
     /**
@@ -161,12 +160,19 @@ public class Hotel implements Serializable {        // Klasse Hotel
      * @param zimmernummer Zimmernummer
      * @return {@code true}, wenn erfolgreich, sonst {@code false}
      */
-    public boolean checkIn(int zimmernummer) {
+    public boolean checkIn(int zimmernummer, String gastName) {
         for (Zimmer z : zimmerListe) {
             if (z.getZimmernummer() == zimmernummer) {
                 if (!z.isBelegt()) {
-                    z.setBelegt(true);
-                    System.out.println("Check-in erfolgreich für Zimmer " + zimmernummer);
+                    if (z.isReserviert()) {
+                        // Nur der reservierte Gast darf einchecken
+                        if (z.getReservierterGast() == null || !z.getReservierterGast().equals(gastName)) {
+                            System.out.println("Check-in nur für reservierten Gast möglich: " + z.getReservierterGast());
+                            return false;
+                        }
+                    }
+                    z.setBelegt(true, gastName);
+                    System.out.println("Check-in erfolgreich für Zimmer " + zimmernummer + " durch " + gastName);
                     return true;
                 } else {
                     System.out.println("Zimmer " + zimmernummer + " ist bereits belegt.");

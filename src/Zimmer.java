@@ -15,6 +15,7 @@ public class Zimmer implements Serializable {
     private boolean belegt;               // Gibt an, ob das Zimmer belegt ist
     private boolean reserviert;           // Gibt an, ob das Zimmer reserviert ist
     private String reservierterGast;      // Name des reservierten Gastes
+    private String belegterGast; // Name der eingecheckten Hauptperson
     private List<String> ausstattung;     // Liste der Ausstattung des Zimmers
     private Set<Verpflegung> verpflegung; // Menge der gebuchten Verpflegung (max. 1)
     private boolean ausgecheckt = false;  // Kennzeichnet, ob der Gast ausgecheckt wurde
@@ -203,6 +204,43 @@ public class Zimmer implements Serializable {
     }
 
     /**
+     * Liefert den Namen der eingecheckten Hauptperson.
+     *
+     * @return Name der Hauptperson oder null, falls nicht belegt
+     */
+    public String getBelegterGast() {
+        return belegterGast;
+    }
+
+    /**
+     * Setzt den Namen der eingecheckten Hauptperson.
+     *
+     * @param name Name der Hauptperson
+     */
+    public void setBelegterGast(String name) {
+        this.belegterGast = name;
+    }
+
+    /**
+     * Setzt den Belegungsstatus des Zimmers und den Namen der Hauptperson.
+     * <p>
+     * Beim Belegen wird das Zimmer automatisch als nicht ausgecheckt markiert.
+     * </p>
+     *
+     * @param belegt   Belegungsstatus
+     * @param gastName Name der Hauptperson
+     */
+    public void setBelegt(boolean belegt, String gastName) {
+        this.belegt = belegt;
+        if (belegt) {
+            this.ausgecheckt = false;
+            this.belegterGast = gastName;
+        } else {
+            this.belegterGast = null;
+        }
+    }
+
+    /**
      * Überschreibt die Standard-String-Repräsentation.
      * <p>
      * Zeigt Zimmernummer, Typ, maximale Personen, Preis, Status und gebuchte Verpflegung an.
@@ -212,10 +250,14 @@ public class Zimmer implements Serializable {
      */
     @Override
     public String toString() {
-        // Nicht-triviale Bedingung: Statusanzeige abhängig von belegt, reserviert oder frei
-        String status = belegt ? "belegt" : (reserviert ? "reserviert für " + reservierterGast : "frei");
-
-        // Prüfen, ob Verpflegung gebucht ist
+        String status;
+        if (belegt) {
+            status = "belegt durch " + (belegterGast != null ? belegterGast : "unbekannt");
+        } else if (reserviert) {
+            status = "reserviert für " + reservierterGast;
+        } else {
+            status = "frei";
+        }
         String verpflegungStr = verpflegung.isEmpty() ? "keine Verpflegung gebucht" : "Verpflegung: " + getVerpflegung();
 
         return "Zimmer " + zimmernummer + " (" + typ + ") - max. Personen: " + getMaxPersonen() +
