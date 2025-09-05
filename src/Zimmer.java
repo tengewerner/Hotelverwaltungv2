@@ -15,7 +15,7 @@ public class Zimmer implements Serializable {
     private boolean belegt;               // Gibt an, ob das Zimmer belegt ist
     private boolean reserviert;           // Gibt an, ob das Zimmer reserviert ist
     private String reservierterGast;      // Name des reservierten Gastes
-    private String belegterGast; // Name der eingecheckten Hauptperson
+    private String belegterGast;          // Name der eingecheckten Hauptperson
     private List<String> ausstattung;     // Liste der Ausstattung des Zimmers
     private Set<Verpflegung> verpflegung; // Menge der gebuchten Verpflegung (max. 1)
     private boolean ausgecheckt = false;  // Kennzeichnet, ob der Gast ausgecheckt wurde

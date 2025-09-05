@@ -39,7 +39,7 @@ public class Hotel implements Serializable {        // Klasse Hotel
      *
      * @param zimmernummer Zimmernummer, die reserviert werden soll
      * @param gastName     Name des Gastes
-     * @return {@code true}, wenn Reservierung erfolgreich war, sonst {@code false}
+     * @return true, wenn Reservierung erfolgreich war, sonst false
      */
     public boolean reserveZimmer(int zimmernummer, String gastName) {
         for (Zimmer z : zimmerListe) {
@@ -66,7 +66,7 @@ public class Hotel implements Serializable {        // Klasse Hotel
      * Bestellt Zimmerservice für eine bestimmte Anzahl an Personen in einem Zimmer.
      *
      * @param zimmernummer Zimmernummer
-     * @param portionen    Anzahl der Portionen
+     * @param portionen    Anzahl der Essensportionen
      */
     public void bestelleZimmerservice(int zimmernummer, int portionen) {
         Zimmer zimmer = null;
@@ -88,8 +88,8 @@ public class Hotel implements Serializable {        // Klasse Hotel
             return;
         }
 
-        // Portionen müssen mindestens 1 sein
-        if (portionen < 1) {
+
+        if (portionen < 1) {      // Portionen müssen mindestens 1 sein
             System.out.println("Ungültige Anzahl Portionen. Mindestens 1 Portion muss bestellt werden.");
             return;
         }
@@ -158,7 +158,8 @@ public class Hotel implements Serializable {        // Klasse Hotel
      * Führt einen Check-in für ein bestimmtes Zimmer durch.
      *
      * @param zimmernummer Zimmernummer
-     * @return {@code true}, wenn erfolgreich, sonst {@code false}
+     * @param gastName     Name des Gastes
+     * @return true, wenn erfolgreich, sonst false
      */
     public boolean checkIn(int zimmernummer, String gastName) {
         for (Zimmer z : zimmerListe) {
@@ -192,7 +193,7 @@ public class Hotel implements Serializable {        // Klasse Hotel
      *
      * </p>
      * @param zimmernummer Zimmernummer
-     * @return {@code true}, wenn erfolgreich, sonst {@code false}
+     * @return true, wenn erfolgreich, sonst false
      */
     public boolean checkOut(int zimmernummer) {
         for (Zimmer z : zimmerListe) {
@@ -225,7 +226,7 @@ public class Hotel implements Serializable {        // Klasse Hotel
      *
      * @param zimmernummer Zimmernummer
      * @param verpflegung  Gewünschte Verpflegungsart
-     * @return {@code true}, wenn erfolgreich, sonst {@code false}
+     * @return true, wenn erfolgreich, sonst false
      */
     public boolean bucheVerpflegung(int zimmernummer, Verpflegung verpflegung) {
         for (Zimmer z : zimmerListe) {
